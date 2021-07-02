@@ -10,9 +10,7 @@ namespace TestTasks
     class Program
     {
         static async Task Main()
-        {
-            //Below are examples of usage. However, it is not guaranteed that your implementation will be tested on those examples.            
-
+        {                      
             ApiHelper.InitializeClient();
 
             var stringProcessor = new StringProcessor();
@@ -24,7 +22,6 @@ namespace TestTasks
             commodityRepository.GetExportTariff("Iron/steel scrap not sorted or graded");            
 
             var weatherManager = new WeatherManager();
-            var cityA = await weatherManager.GetCityByName("kyiv,ua");
             var comparisonResult = await weatherManager.CompareWeather("kyiv,ua", "lviv,ua", 4);
         }
     }

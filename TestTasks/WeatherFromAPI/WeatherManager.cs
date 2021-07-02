@@ -9,9 +9,9 @@ namespace TestTasks.WeatherFromAPI
     public class WeatherManager
     {
         private const string APIkey = "ea39974ee15009777124d9c22a2a2caa";
-        private const string geoUrl = "http://api.openweathermap.org/geo/1.0/direct?";
-        private const string weatherUrl = "https://api.openweathermap.org/data/2.5/onecall/timemachine?";
-        private const string todayWeatherUrl = "https://api.openweathermap.org/data/2.5/onecall?";
+        private const string geoCityUrl = "geo/1.0/direct?";
+        private const string pastWeatherUrl = "data/2.5/onecall/timemachine?";
+        private const string todayWeatherUrl = "data/2.5/onecall?";
 
         public async Task<WeatherComparisonResult> CompareWeather(string cityA, string cityB, int dayCount)
         {
@@ -83,7 +83,7 @@ namespace TestTasks.WeatherFromAPI
 
         public async Task<City> GetCityByName(string cityName)
         {
-            string url = geoUrl + $"q={cityName}&limit=1&appid=" + APIkey;
+            string url = geoCityUrl + $"q={cityName}&limit=1&appid=" + APIkey;
 
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
             {
@@ -102,7 +102,7 @@ namespace TestTasks.WeatherFromAPI
 
         public async Task<DayWeatherInfo> GetWeatherDayHistory(City city, uint time)
         {
-            string url = weatherUrl + $"lat={city.Lat}&lon={city.Lon}"+
+            string url = pastWeatherUrl + $"lat={city.Lat}&lon={city.Lon}"+
                             $"&dt={time}&exclude=current&appid=" + APIkey;
 
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))

@@ -33,6 +33,13 @@ namespace TestTasks.WeatherFromAPI.Models
             }
         }
 
+        public DayWeatherInfo(double lat, double lon)
+        {
+            Lat = lat;
+            Lon = lon;
+            Hourly = new List<HourWeather>();
+        }
+
         public DayWeatherInfo()
         {
             Lat = 0;

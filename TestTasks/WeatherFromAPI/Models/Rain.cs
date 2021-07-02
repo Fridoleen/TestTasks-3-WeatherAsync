@@ -18,6 +18,7 @@ namespace TestTasks.WeatherFromAPI.Models
         }
 
         public Rain()
-        { }
+        {
+        }
     }
 }

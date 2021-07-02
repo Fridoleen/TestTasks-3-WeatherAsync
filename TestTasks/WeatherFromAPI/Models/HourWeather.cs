@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace TestTasks.WeatherFromAPI.Models
 {
     public class HourWeather
     {
+        [JsonProperty(PropertyName = "temp")]
         public double Temp { get; set; }
+
+        
+        [JsonProperty(PropertyName = "rain")]
         public Rain rain { get; set; }
 
         public HourWeather(double _temp, double _rain)

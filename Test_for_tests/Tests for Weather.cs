@@ -112,7 +112,7 @@ namespace Test_for_tests
 
             Assert.AreEqual(weather.SumRainVolume(dayWeather.Hourly), 3.03);
 
-            Assert.AreEqual(weather.AvgTemperature(dayWeather.Hourly), 290.297917);
+            Assert.AreEqual(weather.AvgTemperature(dayWeather.Hourly), 290.394583);
         }
 
         [TestMethod]
@@ -137,7 +137,7 @@ namespace Test_for_tests
             City cityTwo = await weather.GetCityByName("Kyiv");
             DayWeatherInfo dayWeatherTwo = await weather.GetWeatherDayHistory(cityTwo, 1624914865);
 
-            Assert.AreEqual(weather.AvgTemperature(dayWeatherOne.Hourly), 290.297917);
+            Assert.AreEqual(weather.AvgTemperature(dayWeatherOne.Hourly), 290.394583);
             Assert.AreEqual(weather.SumRainVolume(dayWeatherOne.Hourly), 3.03);
 
             Assert.AreEqual(weather.AvgTemperature(dayWeatherTwo.Hourly), 294.869167);
