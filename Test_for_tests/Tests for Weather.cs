@@ -74,7 +74,7 @@ namespace Test_for_tests
             var weather = new WeatherManager();
             ApiHelper.InitializeClient();
             City cityOne = new City("London", 51.5085, -0.1257);
-            DayWeatherInfo dayWeather = await weather.GetWeatherDayHistory(cityOne, 1624914865);
+            DayWeatherInfo dayWeather = await weather.GetPastDayWeather(cityOne, 1624914865);
             bool result = false;
             double RainVolume = 0;
             foreach (var hr in dayWeather.Hourly)
@@ -97,7 +97,7 @@ namespace Test_for_tests
             var weather = new WeatherManager();
             ApiHelper.InitializeClient();
             City city = new City("London", 51.5085, -0.1257);
-            DayWeatherInfo dayWeather = await weather.GetWeatherDayHistory(city, 1624914865);
+            DayWeatherInfo dayWeather = await weather.GetPastDayWeather(city, 1624914865);
 
             Assert.AreEqual(dayWeather.Hourly.Count, 24);            
         }
@@ -108,7 +108,7 @@ namespace Test_for_tests
             var weather = new WeatherManager();
             ApiHelper.InitializeClient();
             City city = new City("London", 51.5085, -0.1257);
-            DayWeatherInfo dayWeather = await weather.GetWeatherDayHistory(city, 1624914865);
+            DayWeatherInfo dayWeather = await weather.GetPastDayWeather(city, 1624914865);
 
             Assert.AreEqual(weather.SumRainVolume(dayWeather.Hourly), 3.03);
 
@@ -133,9 +133,9 @@ namespace Test_for_tests
             var weather = new WeatherManager();
             ApiHelper.InitializeClient();
             City cityOne = new City("London", 51.5085, -0.1257);
-            DayWeatherInfo dayWeatherOne = await weather.GetWeatherDayHistory(cityOne, 1624914865);
+            DayWeatherInfo dayWeatherOne = await weather.GetPastDayWeather(cityOne, 1624914865);
             City cityTwo = await weather.GetCityByName("Kyiv");
-            DayWeatherInfo dayWeatherTwo = await weather.GetWeatherDayHistory(cityTwo, 1624914865);
+            DayWeatherInfo dayWeatherTwo = await weather.GetPastDayWeather(cityTwo, 1624914865);
 
             Assert.AreEqual(weather.AvgTemperature(dayWeatherOne.Hourly), 290.394583);
             Assert.AreEqual(weather.SumRainVolume(dayWeatherOne.Hourly), 3.03);

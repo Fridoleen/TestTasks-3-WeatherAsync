@@ -28,8 +28,9 @@ namespace TestTasks.WeatherFromAPI
             for (int i = 1; i < dayCount; i++)
             {
                 uint dayAtUnixTime = (uint) (currentTime - 86400 * i);
-                DayWeatherInfo dayCityOne = await GetWeatherDayHistory(firstCity, dayAtUnixTime);
-                DayWeatherInfo dayCityTwo = await GetWeatherDayHistory(secondCity, dayAtUnixTime);
+
+                DayWeatherInfo dayCityOne = await GetPastDayWeather(firstCity, dayAtUnixTime);
+                DayWeatherInfo dayCityTwo = await GetPastDayWeather(secondCity, dayAtUnixTime);
 
                 if (FirstDayIsWarmer(dayCityOne, dayCityTwo)) warmerDays++;
                 if (FirstDayIsRainier(dayCityOne, dayCityTwo)) rainierDays++;
@@ -43,24 +44,29 @@ namespace TestTasks.WeatherFromAPI
 
             var result = new WeatherComparisonResult(cityA, cityB, warmerDays, rainierDays);
 
-            return await Task.Run(() => result);
+            return result;
         }
 
-        public async Task<bool> TodayFirstWasWarmer(City cityOne, City cityTwo)
-        {
-            DayWeatherInfo dayCityOne = await GetTodayWeather(cityOne);
-            DayWeatherInfo dayCityTwo = await GetTodayWeather(cityTwo);
 
-            return FirstDayIsWarmer(dayCityOne, dayCityTwo);
-        }
 
-        public async Task<bool> TodayFirstWasRainier(City cityOne, City cityTwo)
-        {
-            DayWeatherInfo dayCityOne = await GetTodayWeather(cityOne);
-            DayWeatherInfo dayCityTwo = await GetTodayWeather(cityTwo);
+        public async Task<City> GetCityByName(string cityName)
+                {
+                    string url = geoCityUrl + $"q={cityName}&limit=1&appid=" + APIkey;
 
-            return FirstDayIsRainier(dayCityOne, dayCityTwo);
-        }
+                    using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+                    {
+                        if(response.IsSuccessStatusCode)
+                        {
+                            City[] result = await response.Content.ReadAsAsync<City[]>();
+
+                            return result[0];
+                        }
+                        else
+                        {
+                            throw new ArgumentException();
+                        }
+                    }
+                }
 
         public async Task<DayWeatherInfo> GetTodayWeather(City city)
         {
@@ -81,28 +87,9 @@ namespace TestTasks.WeatherFromAPI
             }
         }
 
-        public async Task<City> GetCityByName(string cityName)
+        public async Task<DayWeatherInfo> GetPastDayWeather(City city, uint time)
         {
-            string url = geoCityUrl + $"q={cityName}&limit=1&appid=" + APIkey;
-
-            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
-            {
-                if(response.IsSuccessStatusCode)
-                {
-                    City[] result = await response.Content.ReadAsAsync<City[]>();
-
-                    return result[0];
-                }
-                else
-                {
-                    throw new ArgumentException();
-                }
-            }
-        }
-
-        public async Task<DayWeatherInfo> GetWeatherDayHistory(City city, uint time)
-        {
-            string url = pastWeatherUrl + $"lat={city.Lat}&lon={city.Lon}"+
+            string url = pastWeatherUrl + $"lat={city.Lat}&lon={city.Lon}" +
                             $"&dt={time}&exclude=current&appid=" + APIkey;
 
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
@@ -119,6 +106,22 @@ namespace TestTasks.WeatherFromAPI
                 }
             }
 
+        }
+
+        public async Task<bool> TodayFirstWasWarmer(City cityOne, City cityTwo)
+        {
+            DayWeatherInfo dayCityOne = await GetTodayWeather(cityOne);
+            DayWeatherInfo dayCityTwo = await GetTodayWeather(cityTwo);
+
+            return FirstDayIsWarmer(dayCityOne, dayCityTwo);
+        }
+
+        public async Task<bool> TodayFirstWasRainier(City cityOne, City cityTwo)
+        {
+            DayWeatherInfo dayCityOne = await GetTodayWeather(cityOne);
+            DayWeatherInfo dayCityTwo = await GetTodayWeather(cityTwo);
+
+            return FirstDayIsRainier(dayCityOne, dayCityTwo);
         }
 
         public bool FirstDayIsWarmer(DayWeatherInfo dayOne, DayWeatherInfo dayTwo)
@@ -144,9 +147,7 @@ namespace TestTasks.WeatherFromAPI
                 result += hour.rain.rainVolume;
             }
 
-            //For test purposes easier to round
-            return Math.Round(result, 6);      
-            //return result;
+            return Math.Round(result, 6);            
         }
 
         public double AvgTemperature(ICollection<HourWeather> hourly)
@@ -160,9 +161,7 @@ namespace TestTasks.WeatherFromAPI
 
             if(hourly.Count > 0) result /= hourly.Count;
 
-            //for test purposes easier to round
             return Math.Round(result, 6);
-            //return result;
         }
     }
 }
