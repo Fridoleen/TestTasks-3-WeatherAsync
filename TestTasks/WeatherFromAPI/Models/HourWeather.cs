@@ -6,7 +6,6 @@ namespace TestTasks.WeatherFromAPI.Models
     {
         [JsonProperty(PropertyName = "temp")]
         public double Temp { get; set; }
-
         
         [JsonProperty(PropertyName = "rain")]
         public Rain rain { get; set; }

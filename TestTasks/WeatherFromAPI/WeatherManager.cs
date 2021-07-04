@@ -25,8 +25,8 @@ namespace TestTasks.WeatherFromAPI
 
             for (int i = 0; i < dayCount; i++)
             {
-                DayWeatherInfo dayCityOne = await GetHourlyWeather(firstCity, i);
-                DayWeatherInfo dayCityTwo = await GetHourlyWeather(secondCity, i);
+                DayWeatherInfo dayCityOne = await GetHourlyWeatherDay(firstCity, i);
+                DayWeatherInfo dayCityTwo = await GetHourlyWeatherDay(secondCity, i);
 
                 (bool warmer, bool rainier) = FirstDayIsWarmerNRainier(dayCityOne, dayCityTwo);
                 if (warmer) warmerDays++;
@@ -55,7 +55,7 @@ namespace TestTasks.WeatherFromAPI
             }
         }
 
-        public async Task<DayWeatherInfo> GetHourlyWeather(City city, int daysAgo)
+        public async Task<DayWeatherInfo> GetHourlyWeatherDay(City city, int daysAgo)
         {
             string url;
 

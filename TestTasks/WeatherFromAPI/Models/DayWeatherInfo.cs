@@ -14,6 +14,13 @@ namespace TestTasks.WeatherFromAPI.Models
         [JsonProperty(PropertyName = "hourly")]
         public List<HourWeather> Hourly { get; set; }
 
+        public DayWeatherInfo(double lat, double lon, ICollection<HourWeather> hourly)
+        {
+            Lat = lat;
+            Lon = lon;
+            Hourly = new List<HourWeather>(hourly);
+        }
+
         public DayWeatherInfo(double lat, double lon, double[] temp, double[] rain)
         {
             Lat = lat;
