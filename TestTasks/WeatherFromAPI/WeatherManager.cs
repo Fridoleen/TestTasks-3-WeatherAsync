@@ -58,6 +58,7 @@ namespace TestTasks.WeatherFromAPI
         public async Task<DayWeatherInfo> GetHourlyWeatherDay(City city, int daysAgo)
         {
             string url;
+            if (daysAgo < 0 || daysAgo > 4) throw new ArgumentException("Wrong daysAgo number, must be [0-4]");
 
             if(daysAgo == 0)
             {

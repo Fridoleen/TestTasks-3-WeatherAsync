@@ -124,7 +124,7 @@ namespace Test_for_tests
             (temp, rain) = weather.GetAvgTempNRain(cityWeatherToday.Hourly);
             Assert.AreEqual(cityWeatherToday.Hourly.Count, 24);
             Assert.AreEqual(temp > 0, true);
-            Assert.AreEqual(rain > 0, false); //there were no rain in Aleppo 2 days ago
+            Assert.AreEqual(rain > 0, false); //there were no rain in Aleppo 3 days ago
 
         }        
 
